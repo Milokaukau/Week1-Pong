@@ -27,54 +27,23 @@ func _ready():
 	$right_score.text = str(right_score)
 	
 	# Initialize variables
-
 	ball = $ball
 
-	
 
 func _process(delta):
 	
 	# Move the pads
-	if Input.is_action_pressed("left_move_up"):
-		var position = $left_pad.position.y - PAD_SPEED * delta
-		$left_pad.position.y = clamp(position, 20, 380)
-	if Input.is_action_pressed("left_move_down"):
-		$left_pad.position.y += PAD_SPEED * delta
+#	if Input.is_action_pressed("left_move_up"):
+#		$left_pad.move_and_collide(Vector2(0,-1)*PAD_SPEED*delta)
+#	if Input.is_action_pressed("left_move_down"):
+#		$left_pad.move_and_collide(Vector2(0,1)*PAD_SPEED*delta)
 	if Input.is_action_pressed("right_move_up"):
-		$right_pad.position.y -= PAD_SPEED * delta
+		$right_pad.move_and_collide(Vector2(0,-1)*PAD_SPEED*delta)
 	if Input.is_action_pressed("right_move_down"):
-		$right_pad.position.y += PAD_SPEED * delta
+		$right_pad.move_and_collide(Vector2(0,1)*PAD_SPEED*delta)
 	
 	#if has_node("ball"):
-	
-	
 
-
-func _on_right_pad_area_entered(area):
-	if area == $ball:
-		ball_collide_pad($right_pad)
-
-func _on_left_pad_area_entered(area):
-	if area == $ball:
-		ball_collide_pad($left_pad)
-
-func ball_collide_pad(collider):
-	var new_ball_dir : Vector2
-	
-	# Flip direction horizontally
-	if(ball_dir.x > 0):
-		new_ball_dir.x = -1
-	else:
-		new_ball_dir.x = 1
-	
-	# Get distance between ball centre and pad centre
-	# The further the ball is away from the pad centre, bigger the angle of bounce
-	var dist = ball.position.y - collider.position.y
-	var pad_height = collider.get_sprite().texture.get_size().y
-	new_ball_dir.y = dist / pad_height
-	
-	# Set the new direction of the ball
-	ball_dir = new_ball_dir.normalized()
 
 func ball_collide_wall(collider):
 	var new_ball_dir : Vector2

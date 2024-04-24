@@ -30,7 +30,7 @@ size = Vector2(638, 19)
 [node name="root" type="Node2D"]
 script = ExtResource("1_tkadv")
 
-[node name="left_pad" type="Area2D" parent="."]
+[node name="left_pad" type="StaticBody2D" parent="."]
 position = Vector2(67, 200)
 script = ExtResource("2_s5n52")
 
@@ -40,7 +40,7 @@ texture = ExtResource("1_4g1hw")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="left_pad"]
 shape = SubResource("CapsuleShape2D_131ar")
 
-[node name="right_pad" type="Area2D" parent="."]
+[node name="right_pad" type="StaticBody2D" parent="."]
 position = Vector2(577, 200)
 script = ExtResource("3_7nhhb")
 
@@ -103,7 +103,5 @@ offset_bottom = 51.0
 text = "0"
 horizontal_alignment = 1
 
-[connection signal="area_entered" from="left_pad" to="." method="_on_left_pad_area_entered"]
-[connection signal="area_entered" from="right_pad" to="." method="_on_right_pad_area_entered"]
 [connection signal="ball_out_left" from="ball" to="." method="_on_ball_ball_out_left"]
 [connection signal="ball_out_right" from="ball" to="." method="_on_ball_ball_out_right"]
