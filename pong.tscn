@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://cae8u51qmgwhb" path="res://pong_assets/separator.png" id="3_hklwn"]
 [ext_resource type="Texture2D" uid="uid://ug2t25yk16yc" path="res://pong_assets/ball.png" id="4_xahnf"]
 [ext_resource type="Texture2D" uid="uid://tb1sun6vwmna" path="res://pong_assets/plank.png" id="6_yyert"]
+[ext_resource type="Script" path="res://ball.gd" id="7_sxc3h"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_131ar"]
 radius = 4.0
@@ -16,12 +17,6 @@ height = 34.0
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5dxqm"]
 radius = 4.0
 height = 34.0
-
-[sub_resource type="Curve2D" id="Curve2D_lpoh5"]
-_data = {
-"points": PackedVector2Array(0, 0, 0, 0, 319, 1, 0, 0, 0, 0, 319, 399)
-}
-point_count = 2
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_fywpj"]
 radius = 4.0
@@ -59,12 +54,10 @@ shape = SubResource("CapsuleShape2D_5dxqm")
 position = Vector2(320, 200)
 texture = ExtResource("3_hklwn")
 
-[node name="Path2D" type="Path2D" parent="seperator"]
-position = Vector2(-320, -200)
-curve = SubResource("Curve2D_lpoh5")
-
-[node name="ball" type="Area2D" parent="."]
+[node name="ball" type="RigidBody2D" parent="."]
 position = Vector2(320, 200)
+gravity_scale = 0.0
+script = ExtResource("7_sxc3h")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ball"]
 shape = SubResource("CircleShape2D_fywpj")
@@ -72,18 +65,18 @@ shape = SubResource("CircleShape2D_fywpj")
 [node name="ball_sprite" type="Sprite2D" parent="ball"]
 texture = ExtResource("4_xahnf")
 
-[node name="top_wall" type="Area2D" parent="."]
-position = Vector2(324, 10)
+[node name="top_wall" type="StaticBody2D" parent="."]
+position = Vector2(322, 9)
 
 [node name="Sprite2D" type="Sprite2D" parent="top_wall"]
 scale = Vector2(2.15588, 0.2825)
 texture = ExtResource("6_yyert")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="top_wall"]
-position = Vector2(-3, 0)
+position = Vector2(-3, -1.52588e-05)
 shape = SubResource("RectangleShape2D_vnwrq")
 
-[node name="btm_wall" type="Area2D" parent="."]
+[node name="btm_wall" type="StaticBody2D" parent="."]
 position = Vector2(323, 391)
 
 [node name="Sprite2D" type="Sprite2D" parent="btm_wall"]
@@ -112,5 +105,5 @@ horizontal_alignment = 1
 
 [connection signal="area_entered" from="left_pad" to="." method="_on_left_pad_area_entered"]
 [connection signal="area_entered" from="right_pad" to="." method="_on_right_pad_area_entered"]
-[connection signal="area_entered" from="top_wall" to="." method="_on_top_wall_area_entered"]
-[connection signal="area_entered" from="btm_wall" to="." method="_on_btm_wall_area_entered"]
+[connection signal="ball_out_left" from="ball" to="." method="_on_ball_ball_out_left"]
+[connection signal="ball_out_right" from="ball" to="." method="_on_ball_ball_out_right"]

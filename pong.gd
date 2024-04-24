@@ -2,7 +2,7 @@ extends Node2D
 
 # Member variables
 var pad_size
-var screen_size : Vector2
+
 
 # Constant fo pads speed
 const PAD_SPEED = 330
@@ -27,15 +27,9 @@ func _ready():
 	$right_score.text = str(right_score)
 	
 	# Initialize variables
-	screen_size = get_viewport_rect().size
+
 	ball = $ball
-	ball_init_pos = Vector2($seperator.position.x, randf_range(100.0, 300.0))
-	
-	# Setting up ball
-	ball.visible = false
-	ball.position = ball_init_pos
-	ball_dir = (Vector2(1,randf_range(-PI / 4, PI / 4))).normalized()
-	ball.visible = true
+
 	
 
 func _process(delta):
@@ -51,18 +45,8 @@ func _process(delta):
 	if Input.is_action_pressed("right_move_down"):
 		$right_pad.position.y += PAD_SPEED * delta
 	
-	if has_node("ball"):
-		ball.position += ball_dir * ball_speed * delta
-		
-		# Check ball out
-		if(ball.position.x < 0):
-			ball.queue_free()
-			right_score += 1
-			$right_score.text = str(right_score)
-		if(ball.position.x > screen_size.x):
-			ball.queue_free()
-			left_score += 1
-			$left_score.text = str(left_score)
+	#if has_node("ball"):
+	
 	
 
 
@@ -105,12 +89,12 @@ func ball_collide_wall(collider):
 	
 	ball_dir = new_ball_dir.normalized()
 
-func _on_top_wall_area_entered(area):
-	if area == $ball:
-		ball_collide_wall($top_wall)
+
+func _on_ball_ball_out_left():
+	right_score += 1
+	$right_score.text = str(right_score)
 
 
-
-func _on_btm_wall_area_entered(area):
-	if area == $ball:
-		ball_collide_wall($btm_wall)
+func _on_ball_ball_out_right():
+	left_score += 1
+	$left_score.text = str(left_score)
