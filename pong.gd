@@ -41,8 +41,6 @@ func _process(delta):
 		$right_pad.move_and_collide(Vector2(0,-1)*PAD_SPEED*delta)
 	if Input.is_action_pressed("right_move_down"):
 		$right_pad.move_and_collide(Vector2(0,1)*PAD_SPEED*delta)
-	
-	#if has_node("ball"):
 
 
 func ball_collide_wall(collider):
@@ -60,10 +58,12 @@ func ball_collide_wall(collider):
 
 
 func _on_ball_ball_out_left():
+	$me_scored.play()
 	right_score += 1
 	$right_score.text = str(right_score)
 
 
 func _on_ball_ball_out_right():
+	$ai_scored.play()
 	left_score += 1
 	$left_score.text = str(left_score)

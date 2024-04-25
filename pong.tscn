@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://luc55pv373ux"]
+[gd_scene load_steps=19 format=3 uid="uid://5c630aj2bg2n"]
 
 [ext_resource type="Texture2D" uid="uid://dcmiqwts41yq0" path="res://pong_assets/left_pallete.png" id="1_4g1hw"]
 [ext_resource type="Script" path="res://pong.gd" id="1_tkadv"]
@@ -9,6 +9,9 @@
 [ext_resource type="Texture2D" uid="uid://ug2t25yk16yc" path="res://pong_assets/ball.png" id="4_xahnf"]
 [ext_resource type="Texture2D" uid="uid://tb1sun6vwmna" path="res://pong_assets/plank.png" id="6_yyert"]
 [ext_resource type="Script" path="res://ball.gd" id="7_sxc3h"]
+[ext_resource type="AudioStream" uid="uid://cewaegoumgk1h" path="res://sound_effects/boing.wav" id="10_dy7fi"]
+[ext_resource type="AudioStream" uid="uid://ck1qjg6i5c7b7" path="res://sound_effects/me_scored.wav" id="11_480vn"]
+[ext_resource type="AudioStream" uid="uid://b3d4qb4w1exw8" path="res://sound_effects/ai_scored.wav" id="12_wgis3"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_131ar"]
 radius = 4.0
@@ -26,6 +29,9 @@ size = Vector2(641, 19)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_abchb"]
 size = Vector2(638, 19)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m566o"]
+size = Vector2(319, 400)
 
 [node name="root" type="Node2D"]
 script = ExtResource("1_tkadv")
@@ -103,5 +109,25 @@ offset_bottom = 51.0
 text = "0"
 horizontal_alignment = 1
 
+[node name="player_area" type="Area2D" parent="."]
+position = Vector2(332, 29)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="player_area"]
+position = Vector2(149.5, 170)
+shape = SubResource("RectangleShape2D_m566o")
+
+[node name="boing" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("10_dy7fi")
+
+[node name="me_scored" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("11_480vn")
+
+[node name="ai_scored" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("12_wgis3")
+
 [connection signal="ball_out_left" from="ball" to="." method="_on_ball_ball_out_left"]
 [connection signal="ball_out_right" from="ball" to="." method="_on_ball_ball_out_right"]
+[connection signal="entered_player_area" from="ball" to="left_pad" method="_on_ball_entered_player_area"]
+[connection signal="exited_player_area" from="ball" to="left_pad" method="_on_ball_exited_player_area"]
+[connection signal="body_entered" from="player_area" to="ball" method="_on_player_area_body_entered"]
+[connection signal="body_exited" from="player_area" to="ball" method="_on_player_area_body_exited"]
