@@ -1,58 +1,44 @@
 extends RigidBody2D
 
-signal entered_player_area
-signal exited_player_area
-signal ball_out_right
-signal ball_out_left
-
 const INITIAL_BALL_SPEED = 200
-var ball_speed = INITIAL_BALL_SPEED
+var ball_speed
 var ball
 var ball_dir
 var ball_init_pos
-var screen_size : Vector2 
+
 
 var trailScene : PackedScene = preload("res://trail.tscn")
 var trail
 
 func _ready():
+	visible = false
 	trail = trailScene.instantiate()
 	add_child(trail)
 	
-	ball_init_pos = Vector2($"../seperator".position.x, randf_range(100.0, 300.0))
-	screen_size = get_viewport_rect().size
-	visible = false
-	position = ball_init_pos
+	ball_speed = INITIAL_BALL_SPEED
 	ball_dir = (Vector2(1,randf_range(-PI / 4, PI / 4))).normalized()
+	ball_init_pos = Vector2($"../seperator".position.x, randf_range(100.0, 300.0))
+	position = ball_init_pos
+	
 	visible = true
 
 func _physics_process(delta):
 	var collision = move_and_collide(ball_dir * ball_speed * delta)
 	
-	# Check ball out
-	if(position.x < 0):
-		queue_free()
-		ball_out_left.emit()
-
-	if(position.x > screen_size.x):
-		queue_free()
-		ball_out_right.emit()
-	
 	if collision:
-		$"../boing".play()
+		$boing.play()
 		var collider = collision.get_collider()
 		
 		if(collider == $"../right_pad" or collider == $"../left_pad"):
 			ball_dir = get_new_dir(collider)
-			ball_speed *= 1.1
 		else:
 			ball_dir = ball_dir.bounce(collision.get_normal())
-			ball_speed *= 1.1
-			
+		
+		ball_speed = clamp(ball_speed*1.1, 200, 600)
 
 
 func get_new_dir(collider):
-	var new_ball_dir : Vector2
+	var new_ball_dir : Vector2 = Vector2.ZERO
 	
 	# Flip direction horizontally
 	if(ball_dir.x > 0):
@@ -69,11 +55,4 @@ func get_new_dir(collider):
 	# Return the new direction of the ball
 	return new_ball_dir.normalized()
 
-
-func _on_player_area_body_entered(body):
-	entered_player_area.emit()
-
-
-func _on_player_area_body_exited(body):
-	exited_player_area.emit()
 

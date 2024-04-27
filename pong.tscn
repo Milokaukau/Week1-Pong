@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://5c630aj2bg2n"]
+[gd_scene load_steps=15 format=3 uid="uid://5c630aj2bg2n"]
 
 [ext_resource type="Texture2D" uid="uid://dcmiqwts41yq0" path="res://pong_assets/left_pallete.png" id="1_4g1hw"]
 [ext_resource type="Script" path="res://pong.gd" id="1_tkadv"]
@@ -6,10 +6,7 @@
 [ext_resource type="Script" path="res://left_pad.gd" id="2_s5n52"]
 [ext_resource type="Script" path="res://right_pad.gd" id="3_7nhhb"]
 [ext_resource type="Texture2D" uid="uid://cae8u51qmgwhb" path="res://pong_assets/separator.png" id="3_hklwn"]
-[ext_resource type="Texture2D" uid="uid://ug2t25yk16yc" path="res://pong_assets/ball.png" id="4_xahnf"]
 [ext_resource type="Texture2D" uid="uid://tb1sun6vwmna" path="res://pong_assets/plank.png" id="6_yyert"]
-[ext_resource type="Script" path="res://ball.gd" id="7_sxc3h"]
-[ext_resource type="AudioStream" uid="uid://cewaegoumgk1h" path="res://sound_effects/boing.wav" id="10_dy7fi"]
 [ext_resource type="AudioStream" uid="uid://ck1qjg6i5c7b7" path="res://sound_effects/me_scored.wav" id="11_480vn"]
 [ext_resource type="AudioStream" uid="uid://b3d4qb4w1exw8" path="res://sound_effects/ai_scored.wav" id="12_wgis3"]
 
@@ -20,9 +17,6 @@ height = 34.0
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5dxqm"]
 radius = 4.0
 height = 34.0
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_fywpj"]
-radius = 4.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vnwrq"]
 size = Vector2(641, 19)
@@ -59,17 +53,6 @@ shape = SubResource("CapsuleShape2D_5dxqm")
 [node name="seperator" type="Sprite2D" parent="."]
 position = Vector2(320, 200)
 texture = ExtResource("3_hklwn")
-
-[node name="ball" type="RigidBody2D" parent="."]
-position = Vector2(320, 200)
-gravity_scale = 0.0
-script = ExtResource("7_sxc3h")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ball"]
-shape = SubResource("CircleShape2D_fywpj")
-
-[node name="ball_sprite" type="Sprite2D" parent="ball"]
-texture = ExtResource("4_xahnf")
 
 [node name="top_wall" type="StaticBody2D" parent="."]
 position = Vector2(322, 9)
@@ -116,18 +99,16 @@ position = Vector2(332, 29)
 position = Vector2(149.5, 170)
 shape = SubResource("RectangleShape2D_m566o")
 
-[node name="boing" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("10_dy7fi")
-
 [node name="me_scored" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("11_480vn")
 
 [node name="ai_scored" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("12_wgis3")
 
-[connection signal="ball_out_left" from="ball" to="." method="_on_ball_ball_out_left"]
-[connection signal="ball_out_right" from="ball" to="." method="_on_ball_ball_out_right"]
-[connection signal="entered_player_area" from="ball" to="left_pad" method="_on_ball_entered_player_area"]
-[connection signal="exited_player_area" from="ball" to="left_pad" method="_on_ball_exited_player_area"]
-[connection signal="body_entered" from="player_area" to="ball" method="_on_player_area_body_entered"]
-[connection signal="body_exited" from="player_area" to="ball" method="_on_player_area_body_exited"]
+[connection signal="ball_entered_player_area" from="." to="left_pad" method="_on_root_ball_entered_player_area"]
+[connection signal="ball_exited_player_area" from="." to="left_pad" method="_on_root_ball_exited_player_area"]
+[connection signal="ball_out_left" from="." to="." method="_on_ball_out_left"]
+[connection signal="ball_out_right" from="." to="." method="_on_ball_out_right"]
+[connection signal="ball_queue_freed" from="." to="." method="_on_ball_queue_freed"]
+[connection signal="body_entered" from="player_area" to="." method="_on_player_area_body_entered"]
+[connection signal="body_exited" from="player_area" to="." method="_on_player_area_body_exited"]
