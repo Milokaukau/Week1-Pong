@@ -1,29 +1,19 @@
 extends Node2D
 
 signal ball_queue_freed
-signal ball_entered_player_area
-signal ball_exited_player_area
-
+signal ball_entered_left_area
+signal ball_exited_left_area
 signal ball_out_right
 signal ball_out_left
 
-# Member variables
-var pad_size
-
-
-# Constant fo pads speed
 const PAD_SPEED = 330
-
-# Constant for ball speed (pixels/sec)
 const INITIAL_BALL_SPEED = 200
-
-var ball_scene : PackedScene = preload("res://ball.tscn")
-var ball
+var pad_size
 var left_score : int
 var right_score : int 
-
+var ball_scene : PackedScene = preload("res://ball.tscn")
+var ball
 var left_pad
-
 var screen_size : Vector2 
 
 func _ready():
@@ -32,6 +22,8 @@ func _ready():
 	create_ball()
 	
 	screen_size = get_viewport_rect().size
+	
+	# Initialize players' scores
 	left_score = 0
 	right_score = 0
 	$left_score.text = str(left_score)
@@ -57,6 +49,11 @@ func _process(delta):
 	if(ball.position.x > screen_size.x):
 		ball_out_right.emit()
 
+func create_ball():
+	ball = ball_scene.instantiate()
+	add_child(ball, true)
+	left_pad.set_ball(ball)
+
 
 func _on_ball_out_left():
 	$me_scored.play()
@@ -78,18 +75,12 @@ func _on_ball_queue_freed():
 	left_pad.set_ball_null()
 	create_ball()
 
-func create_ball():
-	ball = ball_scene.instantiate()
-	add_child(ball, true)
-	left_pad.set_ball(ball)
-	
 
-
-func _on_player_area_body_entered(body):
+func _on_left_area_body_exited(body):
 	if(body == ball):
-		ball_entered_player_area.emit()
+		ball_exited_left_area.emit()
 
 
-func _on_player_area_body_exited(body):
+func _on_left_area_body_entered(body):
 	if(body == ball):
-		ball_exited_player_area.emit()
+		ball_entered_left_area.emit()
