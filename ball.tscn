@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://biinabtigdebp"]
+
+[ext_resource type="Script" path="res://ball.gd" id="1_7les1"]
+[ext_resource type="Texture2D" uid="uid://ug2t25yk16yc" path="res://pong_assets/ball.png" id="2_ge3ea"]
+[ext_resource type="AudioStream" uid="uid://cewaegoumgk1h" path="res://sound_effects/boing.wav" id="3_hnyxt"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fywpj"]
+radius = 4.0
+
+[node name="ball" type="RigidBody2D"]
+position = Vector2(320, 200)
+gravity_scale = 0.0
+script = ExtResource("1_7les1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_fywpj")
+
+[node name="ball_sprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_ge3ea")
+
+[node name="boing" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_hnyxt")
